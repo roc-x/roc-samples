@@ -18,17 +18,10 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
  */
 public class MainActivity extends FlutterActivity {
 
-    private final String METHOD_CHANNEL_NAME = "method_channel_sample";
-    private final String METHOD_NAME_GET_INFO = "getInfo";
-    private final String METHOD_NAME_SAY_HELLO = "sayHello";
     private MethodChannel mMethodChannel;
 
-
-    private final String BASIC_MESSAGE_CHANNEL_NAME = "basic_message_channel_sample";
     private BasicMessageChannel<Object> mBasicMessageChannel;
 
-
-    private final String EVENT_CHANNEL_NAME = "event_channel_sample";
     private EventChannel mEventChannel;
     private Timer timer;
     private TimerTask task;
@@ -47,12 +40,12 @@ public class MainActivity extends FlutterActivity {
     }
 
     private void addMethodChannel() {
-        mMethodChannel = new MethodChannel(getFlutterView(), METHOD_CHANNEL_NAME);
+        mMethodChannel = new MethodChannel(getFlutterView(), "method_channel_sample");
         mMethodChannel.setMethodCallHandler((methodCall, result) -> {
 
             String method = methodCall.method;
 
-            if (METHOD_NAME_GET_INFO.equals(method)) {
+            if ("getInfo".equals(method)) {
 
                 String userName = (String) methodCall.arguments;
 
@@ -71,7 +64,7 @@ public class MainActivity extends FlutterActivity {
 
 
     private void addBasicMessageChannel() {
-        mBasicMessageChannel = new BasicMessageChannel<>(getFlutterView(), BASIC_MESSAGE_CHANNEL_NAME, StandardMessageCodec.INSTANCE);
+        mBasicMessageChannel = new BasicMessageChannel<>(getFlutterView(), "basic_message_channel_sample", StandardMessageCodec.INSTANCE);
         mBasicMessageChannel.setMessageHandler((object, reply) -> {
 
             reply.reply("receive " + object.toString() + " from flutter");
@@ -82,7 +75,7 @@ public class MainActivity extends FlutterActivity {
 
 
     private void addEventChannel() {
-        mEventChannel = new EventChannel(getFlutterView(), EVENT_CHANNEL_NAME);
+        mEventChannel = new EventChannel(getFlutterView(), "event_channel_sample");
         mEventChannel.setStreamHandler(new EventChannel.StreamHandler() {
             @Override
             public void onListen(Object o, EventChannel.EventSink eventSink) {
@@ -110,7 +103,7 @@ public class MainActivity extends FlutterActivity {
 
 
     private void invokeSayHelloMethod() {
-        mMethodChannel.invokeMethod(METHOD_NAME_SAY_HELLO, "", new MethodChannel.Result() {
+        mMethodChannel.invokeMethod("sayHello", "", new MethodChannel.Result() {
             @Override
             public void success(Object o) {
 
